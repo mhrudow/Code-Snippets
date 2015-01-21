@@ -1,0 +1,31 @@
+<h1>Todo List</h1>
+<%= link_to "Users' Tasks", users_path %>
+<div id="task-creation-form">
+  <%= form_for @todo  do |f| %>
+    <h2>New Item</h2>
+    <% unless flash[:notice].nil? %>
+      <div id="flash-notice"><%= flash[:notice] %></div>
+    <% end %>
+    <p class="new_todo">
+      <%= f.label "Content" %>
+      <div id="new_content"><%= f.text_field :content %></div>
+      <%= f.label "Notes" %>
+      <%= f.text_field :notes %>
+      <div id="user"><%= f.select(:user_id, options_for_select([['Choose One', ''], ['Hunter', 1], ['Andy', 2], ['Michael', 3]], selected = @todo.user_id))%></div>
+      <div id="submit_button"><%= f.submit %></div>
+    </p>
+  <% end %>
+</div>
+<ul id="todos">
+  <% @todos.each do |todo| %>
+    <li id="todo_<%=todo.id%>">
+      <%= best_in_place todo, :content %>
+      <div class="checkbox"><%= best_in_place todo, :completed, :type => :checkbox, :collection => [raw("&#x2610;"), raw("&#x2611;")]%></div>
+      <%= best_in_place todo, :user_id, :type => :select, :collection=> [[1, 'Hunter'], [2, 'Andy'], [3, 'Michael']]%>
+      <div class="pos"><%= best_in_place todo, :position %></div>
+      <button id="button">Notes</button>
+      <div class="notes"><%= best_in_place todo, :notes %></div>
+      <%= link_to 'Destroy', todo, :method => :delete %>
+    </li>
+  <% end %>
+</ul>
